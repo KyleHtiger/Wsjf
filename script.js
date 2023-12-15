@@ -145,3 +145,16 @@ function navigateToResults() {
 document.addEventListener('DOMContentLoaded', function () {
   displayResults(); // Call the function to display results
 });
+
+document.getElementById("signInForm").addEventListener("submit", function(event) {
+  event.preventDefault(); // Prevent the form from submitting as we handle it with JavaScript
+  
+  // Get the selected username
+  var selectedUsername = document.querySelector('input[name="username"]:checked').value;
+  
+  // Store the selected username in session storage
+  sessionStorage.setItem("username", selectedUsername);
+  
+  // Redirect to a landing page or perform any other necessary actions
+  window.location.href = "landing.html";
+});
