@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .chip {
+      display: inline-block;
+      padding: 8px;
+      margin: 4px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .nameChip.selected, .numberChip.selected {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+  <title>Number Picker</title>
+</head>
+<body>
+  <h1>WSJF Voting</h1>
+
+  <div id="numberPicker">
+    <label for="featureName">Feature Name:</label>
+    <input type="text" id="featureName" placeholder="Enter feature name">
+
+    <div id="nameChips">
+      <div class="chip nameChip" id="Kyle" onclick="toggleChip('Kyle')">Kyle</div>
+      <div class="chip nameChip" id="Stu" onclick="toggleChip('Stu')">Stu</div>
+      <div class="chip nameChip" id="ML1" onclick="toggleChip('ML1')">ML</div>
+      <div class="chip nameChip" id="Mike" onclick="toggleChip('Mike')">Mike</div>
+      <div class="chip nameChip" id="Jono" onclick="toggleChip('Jono')">Jono</div>
+      <div class="chip nameChip" id="Gina" onclick="toggleChip('Gina')">Gina</div>
+    </div>
+
+    <div id="numberChips">
+      <div class="chip numberChip" id="1" onclick="toggleChip('1')">1</div>
+      <div class="chip numberChip" id="2" onclick="toggleChip('2')">2</div>
+      <div class="chip numberChip" id="3" onclick="toggleChip('3')">3</div>
+      <div class="chip numberChip" id="5" onclick="toggleChip('5')">5</div>
+      <div class="chip numberChip" id="8" onclick="toggleChip('8')">8</div>
+      <div class="chip numberChip" id="13" onclick="toggleChip('13')">13</div>
+    </div>
+
+    <button onclick="pickNumber()">Pick Number</button>
+  </div>
+  <!-- Add this where you want the toast message to appear -->
+  <div id="toast"></div>
+
+  <div id="timerContainer">
+    <h2>Countdown Timer</h2>
+    <button onclick="startTimer()">Start Timer</button>
+    <button onclick="pauseTimer()">Pause Timer</button>
+    <button onclick="clearTimer()">Clear Timer</button>
+    <div id="countdown">2:00</div>
+  </div>
+
+  <!-- Button to navigate to the results page -->
+  <button id="viewResultsBtn" onclick="navigateToResults()">View Results</button>
+
+  <div id="results" style="display: none;">
+    <h1>WSJF Voting Results</h1>
+
+    <div id="resultsContainer">
+      <h2>Results:</h2>
+      <ul id="resultsList"></ul>
+    </div>
+
+    <div id="mostPickedNumberContainer">
+      <h2>Most Picked Number:</h2>
+      <p id="mostPickedNumber"></p>
+    </div>
+
+    <div id="highestNumberPickersContainer">
+      <h2>Highest Number Pickers:</h2>
+      <ul id="highestNumberPickersList"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Event listener for number chips
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        toggleChip(chip.id);
+      });
+    });
+  </script>
+</body>
+</html>

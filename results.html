@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Results Page</title>
+</head>
+<body>
+  <h1>WSJF Voting Results</h1>
+
+  <div id="resultsContainer">
+    <h2>Results:</h2>
+    <ul id="resultsList"></ul>
+  </div>
+
+  <div id="mostPickedNumberContainer">
+    <h2>Most Picked Number:</h2>
+    <p id="mostPickedNumber"></p>
+  </div>
+
+  <div id="highestNumberPickersContainer">
+    <h2>Highest Number Pickers:</h2>
+    <ul id="highestNumberPickersList"></ul>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const resultsList = document.getElementById('resultsList');
+      const mostPickedNumber = document.getElementById('mostPickedNumber');
+      const highestNumberPickersList = document.getElementById('highestNumberPickersList');
+
+      const storedResults = sessionStorage.getItem('results');
+
+      if (storedResults) {
+        const resultsArray = JSON.parse(storedResults);
+        const resultsMap = new Map();
+        let mostPickedCount = 0;
+
+        resultsArray.forEach(result => {
+          const [name, number] = result.split(' ');
+          const listItem = document.createElement('li');
+          listItem.textContent = result;
+          resultsList.appendChild(listItem);
+
+          // Count the number of picks for each number
+          const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
+          resultsMap.set(number, count);
+
+          // Update mostPickedCount and mostPickedNumber
+          if (count > mostPickedCount) {
+            mostPickedCount = count;
+            mostPickedNumber.textContent = number;
+          }
+
+          // Display the users with the highest number picks
+          if (count === mostPickedCount) {
+            const highestNumberPicker = document.createElement('li');
+            highestNumberPicker.textContent = name;
+            highestNumberPickersList.appendChild(highestNumberPicker);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
