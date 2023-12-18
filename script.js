@@ -69,33 +69,44 @@ function displayResults() {
   const storedResults = sessionStorage.getItem('results');
 
   if (storedResults) {
-    const resultsArray = JSON.parse(storedResults);
-    const resultsMap = new Map();
-    let mostPickedCount = 0;
+      const resultsArray = JSON.parse(storedResults);
+      const resultsMap = new Map();
+      let mostPickedCount = 0;
+      let highestPickedNumber = 0;
+      let highestNumberPickers = [];
 
-    resultsArray.forEach(result => {
-      const [name, number] = result.split(' ');
-      const listItem = document.createElement('li');
-      listItem.textContent = result;
-      resultsList.appendChild(listItem);
+      resultsArray.forEach(result => {
+          const [name, number] = result.split(' ');
+          const listItem = document.createElement('li');
+          listItem.textContent = result;
+          resultsList.appendChild(listItem);
 
-      // Count the number of picks for each number
-      const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
-      resultsMap.set(number, count);
+          // Count the number of picks for each number
+          const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
+          resultsMap.set(number, count);
 
-      // Update mostPickedCount and mostPickedNumber
-      if (count > mostPickedCount) {
-        mostPickedCount = count;
-        mostPickedNumber.textContent = number;
-      }
+          // Update mostPickedCount and mostPickedNumber
+          if (count > mostPickedCount) {
+              mostPickedCount = count;
+              highestPickedNumber = parseInt(number, 10);
+              highestNumberPickers = [name]; // Reset the list with a single name
+          } else if (count === mostPickedCount && parseInt(number, 10) > highestPickedNumber) {
+              highestPickedNumber = parseInt(number, 10);
+              highestNumberPickers = [name]; // Reset the list with a single name
+          } else if (count === mostPickedCount && parseInt(number, 10) === highestPickedNumber) {
+              highestNumberPickers.push(name); // Add another name to the list
+          }
+      });
 
-      // Display the users with the highest number picks
-      if (count === mostPickedCount) {
-        const highestNumberPicker = document.createElement('li');
-        highestNumberPicker.textContent = name;
-        highestNumberPickersList.appendChild(highestNumberPicker);
-      }
-    });
+      mostPickedNumber.textContent = highestPickedNumber;
+
+      // Display names of people who picked the highest number
+      highestNumberPickersList.innerHTML = "";
+      highestNumberPickers.forEach(name => {
+          const highestNumberPicker = document.createElement('li');
+          highestNumberPicker.textContent = name;
+          highestNumberPickersList.appendChild(highestNumberPicker);
+      });
   }
 }
 
@@ -123,18 +134,18 @@ function toggleChip(chip) {
   const isSelected = chip.classList.contains('selected');
 
   if (isNameChip) {
-    if (!isSelected) {
-      chip.classList.add('selected');
-    } else {
-      chip.classList.remove('selected');
-    }
+      if (!isSelected) {
+          chip.classList.add('selected');
+      } else {
+          chip.classList.remove('selected');
+      }
   } else {
-    // Handle number chips here (add or remove 'selected' class)
-    if (!isSelected) {
-      chip.classList.add('selected');
-    } else {
-      chip.classList.remove('selected');
-    }
+      // Handle number chips here (add or remove 'selected' class)
+      if (!isSelected) {
+          chip.classList.add('selected');
+      } else {
+          chip.classList.remove('selected');
+      }
   }
 }
 
@@ -144,17 +155,4 @@ function navigateToResults() {
 
 document.addEventListener('DOMContentLoaded', function () {
   displayResults(); // Call the function to display results
-});
-
-document.getElementById("signInForm").addEventListener("submit", function(event) {
-  event.preventDefault(); // Prevent the form from submitting as we handle it with JavaScript
-  
-  // Get the selected username
-  var selectedUsername = document.querySelector('input[name="username"]:checked').value;
-  
-  // Store the selected username in session storage
-  sessionStorage.setItem("username", selectedUsername);
-  
-  // Redirect to a landing page or perform any other necessary actions
-  window.location.href = "landing.html";
 });
